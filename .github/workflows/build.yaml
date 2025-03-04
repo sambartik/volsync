@@ -35,6 +35,3 @@ jobs:
           # Optionally, tag the image with 'latest'
           docker tag ${{ env.OPERATOR_IMAGE }} ${{ env.OPERATOR_IMAGE }}:latest
 
-      - name: Push Operator Container
-        run: |
-          docker push ${{ env.OPERATOR_IMAGE }}:latest
