@@ -1,0 +1,36 @@
+name: Build and Push Operator
+
+on:
+  workflow_dispatch:
+
+env:
+  OPERATOR_IMAGE: "ghcr.io/sambartik/volsync"
+
+jobs:
+  build-and-push:
+    name: Build and Push Operator Container
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build Operator Container
+        run: |
+          # This command calls your Makefile target to build the container
+          make docker-build IMG=${{ env.OPERATOR_IMAGE }}
+          # Optionally, tag the image with 'latest'
+          docker tag ${{ env.OPERATOR_IMAGE }} ${{ env.OPERATOR_IMAGE }}:latest
+
+      - name: Push Operator Container
+        run: |
+          docker push ${{ env.OPERATOR_IMAGE }}:latest
