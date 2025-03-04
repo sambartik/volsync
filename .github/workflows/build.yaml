@@ -1,7 +1,9 @@
 name: Build and Push Operator
 
 on:
-  workflow_dispatch:
+    push:
+      branches: ["multiplatform-container"]
+    workflow_dispatch:
 
 env:
   OPERATOR_IMAGE: "ghcr.io/sambartik/volsync"
